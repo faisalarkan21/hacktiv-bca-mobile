@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="0dp"
+    android:orientation="horizontal"
+    android:padding="5dip">
+
+
+    <TextView
+        android:id="@+id/bus_code"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="15dp"
+        android:layout_marginTop="3dp"
+        android:text="Name"
+        android:textColor="#040404"
+        android:textStyle="bold"
+        android:typeface="sans" />
+
+    <TextView
+        android:id="@+id/bus_capity"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="15dp"
+        android:layout_below="@+id/bus_code"
+        android:layout_marginTop="3dp"
+        android:text="Assets"
+        android:textColor="#343434"
+        android:textSize="15sp" />
+
+    <TextView
+        android:id="@+id/bus_model"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="15dp"
+        android:layout_below="@+id/bus_capity"
+        android:layout_marginTop="3dp"
+        android:text="Assets"
+        android:textColor="#343434"
+        android:textSize="15sp" />
+
+
+</RelativeLayout>

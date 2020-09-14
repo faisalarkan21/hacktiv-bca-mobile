@@ -1,0 +1,2 @@
+rootProject.name='Hacktiv_android_bca'
+include ':app'
