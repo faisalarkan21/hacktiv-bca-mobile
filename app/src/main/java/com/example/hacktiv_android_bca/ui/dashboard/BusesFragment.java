@@ -1,28 +1,29 @@
-package com.example.hacktiv_android_bca;
+package com.example.hacktiv_android_bca.ui.dashboard;
 
 import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.TextView;
+import android.widget.Toast;
 
-import com.example.hacktiv_android_bca.Adapter.BusAdapter;
-import com.example.hacktiv_android_bca.Entity.Agency;
-import com.example.hacktiv_android_bca.Entity.Bus;
-import com.example.hacktiv_android_bca.service.AgencyService;
-import com.example.hacktiv_android_bca.service.BusService;
-import com.example.hacktiv_android_bca.service.UtilsApi;
-import com.example.hacktiv_android_bca.utils.SessionManager;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.snackbar.Snackbar;
-
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.view.View;
-import android.widget.Toast;
-
-import org.json.JSONArray;
+import com.example.hacktiv_android_bca.Adapter.BusAdapter;
+import com.example.hacktiv_android_bca.Entity.Bus;
+import com.example.hacktiv_android_bca.ListBusActivity;
+import com.example.hacktiv_android_bca.R;
+import com.example.hacktiv_android_bca.service.BusService;
+import com.example.hacktiv_android_bca.service.UtilsApi;
+import com.example.hacktiv_android_bca.utils.SessionManager;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,35 +31,38 @@ import java.util.List;
 import retrofit2.Call;
 import retrofit2.Callback;
 
-public class ListBusActivity extends AppCompatActivity {
+public class BusesFragment extends Fragment {
+
     private List<Bus> busList = new ArrayList<>();
     private BusAdapter uAdapter;
     RecyclerView recyclerView;
     SessionManager session;
     BusService busService;
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_list_bus);
-        session = new SessionManager(this);
 
-        uAdapter = new BusAdapter(busList, this);
-        recyclerView = findViewById(R.id.bus_recycler_view);
+    public View onCreateView(@NonNull LayoutInflater inflater,
+                             ViewGroup container, Bundle savedInstanceState) {
+        doFetchBuses();
+        View root = inflater.inflate(R.layout.fragment_buses, container, false);
 
 
-        RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getApplicationContext());
-//        recyclerView.setHasFixedSize(true);
+        uAdapter = new BusAdapter(busList, getActivity());
+        recyclerView = root.findViewById(R.id.bus_recycler_view);
+
+        RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getActivity());
+        recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(mLayoutManager);
-//        recyclerView.addItemDecoration(new DividerItemDecoration(this, LinearLayoutManager.VERTICAL));
-//        recyclerView.setItemAnimator(new DefaultItemAnimator());
+        recyclerView.addItemDecoration(new DividerItemDecoration(getActivity(), LinearLayoutManager.VERTICAL));
+        recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.setAdapter(uAdapter);
 
+        return root;
     }
 
-
     public void doFetchBuses() {
+        session = new SessionManager(getActivity());
         busService = UtilsApi.getBusAPIService();
+        String test = session.getByKey("agencyId");
         Call<ArrayList<Bus>> response = busService.getBuses(session.getByKey("agencyId"));
 
         response.enqueue(new Callback<ArrayList<Bus>>() {
@@ -69,7 +73,7 @@ public class ListBusActivity extends AppCompatActivity {
                         ArrayList<Bus> jsonArray = rawResponse.body();
 
                         if (jsonArray.size() == 0) {
-                            Toast.makeText(ListBusActivity.this, "Tidak ada data.",
+                            Toast.makeText(getActivity(), "Tidak ada data.",
                                     Toast.LENGTH_LONG).show();
                         }
 
@@ -89,7 +93,7 @@ public class ListBusActivity extends AppCompatActivity {
                         e.printStackTrace();
                     }
                 } else {
-                    Toast.makeText(ListBusActivity.this, "Gagal Mengambil Data",
+                    Toast.makeText(getActivity(), "Gagal Mengambil Data",
                             Toast.LENGTH_LONG).show();
                 }
 
@@ -97,17 +101,11 @@ public class ListBusActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<ArrayList<Bus>> call, Throwable throwable) {
-                Toast.makeText(ListBusActivity.this, throwable.getMessage(),
+                Toast.makeText(getActivity(), throwable.getMessage(),
                         Toast.LENGTH_LONG).show();
             }
         });
 
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        doFetchBuses();
     }
 
 

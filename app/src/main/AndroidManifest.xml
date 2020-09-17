@@ -13,7 +13,10 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-        <activity android:name=".DetailBusActivity"></activity>
+        <activity
+            android:name=".HomeTabActivity"
+            android:label="@string/title_activity_home_tab"></activity>
+        <activity android:name=".DetailBusActivity" />
         <activity
             android:name=".ListBusActivity"
             android:label="@string/title_activity_list_bus"

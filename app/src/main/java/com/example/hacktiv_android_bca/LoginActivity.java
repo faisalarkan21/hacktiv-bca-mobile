@@ -62,7 +62,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                         JSONObject jsonObject = new JSONObject(rawResponse.body().string());
                         String jsonToken = jsonObject.getString("data");
                         session.setSession(jsonToken);
-                        Intent goHome = new Intent(LoginActivity.this, HomeActivity.class);
+                        Intent goHome = new Intent(LoginActivity.this, HomeTabActivity.class);
                         startActivity(goHome);
                     } catch (Exception e) {
                         e.printStackTrace();
